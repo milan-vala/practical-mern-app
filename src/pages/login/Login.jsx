@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Paper,
@@ -10,8 +10,30 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (payload) => {
+    try {
+      const url = process.env.REACT_APP_BASEURL + "/api/login";
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${window.sessionStorage.getItem("token")}`,
+        },
+        params: payload,
+      });
+      if (response.data && response.data.success) {
+        navigate("/dashboard");
+      } else setError("Something went wrong!");
+    } catch (error) {
+      console.error("Error: API failed while loggin in - ", error);
+    }
+  };
+
   const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
     useFormik({
       initialValues: {
@@ -23,7 +45,7 @@ const Login = () => {
         password: Yup.string().required("Password is required field."),
       }),
       onSubmit: () => {
-        console.log("values =>", values);
+        handleLogin(values);
       },
     });
 
@@ -88,6 +110,9 @@ const Login = () => {
           <Typography sx={{ mr: 1 }}>don't have an account?</Typography>
           <a href="/signup">Sign up</a>
         </Box>
+        <Typography variant="body1" sx={{ color: "red" }}>
+          {error}
+        </Typography>
       </Paper>
     </Container>
   );
