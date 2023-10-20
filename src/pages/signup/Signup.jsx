@@ -8,8 +8,29 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Signup = () => {
+  const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
+    useFormik({
+      initialValues: {
+        username: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: Yup.object({
+        username: Yup.string().required("Username is required field."),
+        password: Yup.string().required("Password is required field."),
+        confirmPassword: Yup.string()
+          .required("Confirm password is required field.")
+          .oneOf([Yup.ref("password"), null], "Password did not match."),
+      }),
+      onSubmit: () => {
+        console.log("values =>", values);
+      },
+    });
+
   return (
     <Container
       maxWidth="sm"
@@ -28,26 +49,60 @@ const Signup = () => {
         <img src="./weatherapp.png" alt="logo" width={100} height={100} />
         <Grid container spacing={2} mt={2}>
           <Grid item xs={12}>
-            <TextField fullWidth label="Username" variant="outlined" />
+            <TextField
+              name="username"
+              fullWidth
+              label="Username"
+              variant="outlined"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.username && touched.username ? true : false}
+              helperText={
+                errors.username && touched.username ? errors.username : ""
+              }
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField
+              name="password"
               label="Password"
               type="password"
               variant="outlined"
               fullWidth
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={errors.password && touched.password ? true : false}
+              helperText={
+                errors.password && touched.password ? errors.password : ""
+              }
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
+              name="confirmPassword"
               label="Confirm Password"
               type="password"
               variant="outlined"
               fullWidth
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={
+                errors.confirmPassword && touched.confirmPassword ? true : false
+              }
+              helperText={
+                errors.confirmPassword && touched.confirmPassword
+                  ? errors.confirmPassword
+                  : ""
+              }
             />
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth variant="contained" color="primary">
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
               Sign up
             </Button>
           </Grid>
