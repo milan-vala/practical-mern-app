@@ -54,7 +54,7 @@ const Signup = () => {
         </Grid>
         <Box display={"flex"} justifyContent={"flex-end"} mt={2}>
           <Typography sx={{ mr: 1 }}>Already have an account?</Typography>
-          <a href="/#">Login</a>
+          <a href="/login">Login</a>
         </Box>
       </Paper>
     </Container>
