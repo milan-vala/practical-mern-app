@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../utils/AppContext";
 import {
   Container,
   Paper,
@@ -11,14 +12,20 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const context = useContext(AppContext);
+  const navigate = useNavigate();
+
   const handleCreateUser = async (payload) => {
     try {
       const url = process.env.REACT_APP_BASEURL + "/api/signup";
       const response = await axios.post(url, payload);
       if (response.data) {
         window.sessionStorage.setItem("token", response.data);
+        context.setIsLoggedIn(true);
+        navigate("/");
       }
     } catch (error) {
       console.error("Error: API failed while creating user - ", error);

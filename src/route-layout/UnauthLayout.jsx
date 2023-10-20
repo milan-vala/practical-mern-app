@@ -1,22 +1,20 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "../pages/login/Login";
 import Signup from "../pages/signup/Signup";
 import NotFound from "../pages/NotFound";
 
 const UnauthLayout = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login">
-          <Route index element={<Login />} />
-        </Route>
-        <Route path="/signup">
-          <Route index element={<Signup />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path={"/login"}>
+        <Route index element={<Login />} />
+      </Route>
+      <Route path="/signup">
+        <Route index element={<Signup />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

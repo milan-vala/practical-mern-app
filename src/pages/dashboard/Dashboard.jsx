@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../utils/AppContext";
 import moment from "moment";
-import { Table, TableCell, TableRow, Typography } from "@mui/material";
+import { Button, Table, TableCell, TableRow, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import sampleData from "./sample-weather-data.json";
 
 const Dashboard = () => {
+  const userContext = useContext(AppContext);
+  const navigate = useNavigate();
   const {
     response: { categoryAnalysisWeekly, weatherData },
   } = sampleData;
@@ -25,6 +29,15 @@ const Dashboard = () => {
   return (
     <div style={{ width: "100" }}>
       <Typography>Demo</Typography>
+      <Button
+        onClick={() => {
+          userContext.setIsLoggedIn(false);
+          window.location.reload();
+          navigate("/");
+        }}
+      >
+        Logout
+      </Button>
       <div
         style={{
           width: "90%",

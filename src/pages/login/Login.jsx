@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../../utils/AppContext";
 import {
   Container,
   Paper,
@@ -17,17 +18,23 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const context = useContext(AppContext);
+
   const handleLogin = async (payload) => {
     try {
       const url = process.env.REACT_APP_BASEURL + "/api/login";
+      const token = window.sessionStorage.getItem("token");
       const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${window.sessionStorage.getItem("token")}`,
-        },
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
         params: payload,
       });
       if (response.data && response.data.success) {
-        navigate("/dashboard");
+        context.setIsLoggedIn(true);
+        navigate("/");
       } else setError("Something went wrong!");
     } catch (error) {
       console.error("Error: API failed while loggin in - ", error);
