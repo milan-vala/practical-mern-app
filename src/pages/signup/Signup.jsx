@@ -10,8 +10,21 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const Signup = () => {
+  console.log("base url =>", process.env.REACT_APP_BASEURL);
+
+  const handleCreateUser = async (payload) => {
+    try {
+      const url = process.env.REACT_APP_BASEURL + "/api/signup";
+      const response = await axios.post(url, payload);
+      console.log("response =>", response);
+    } catch (error) {
+      console.error("Error: API failed while creating user - ", error);
+    }
+  };
+
   const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
     useFormik({
       initialValues: {
@@ -28,6 +41,7 @@ const Signup = () => {
       }),
       onSubmit: () => {
         console.log("values =>", values);
+        handleCreateUser(values);
       },
     });
 
