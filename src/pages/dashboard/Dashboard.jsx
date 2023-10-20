@@ -10,6 +10,22 @@ const Dashboard = () => {
   } = sampleData;
   console.log("categoryAnalysisWeekly =>", categoryAnalysisWeekly);
 
+  const customWeatherData = weatherData.slice(0, 7);
+  const customCategoryAnalysisWeekly = categoryAnalysisWeekly.slice(0, 5);
+
+  const sortedList = {};
+  categoryAnalysisWeekly.forEach((category) => {
+    const categoryName = category.categoryDescription.replace(/\s/g, "");
+    if (!sortedList[categoryName]) {
+      sortedList[categoryName] = [];
+    }
+    sortedList[categoryName].push(category);
+  });
+  console.log("sortedList ==>", sortedList);
+
+  const categoryEntires = Object.entries(sortedList)
+  categoryEntires.forEach(([key, value]) => console.log(`${key}: ${value}`))
+
   return (
     <div style={{ width: "100" }}>
       <Typography>Demo</Typography>
@@ -31,13 +47,22 @@ const Dashboard = () => {
             <TableCell>W3</TableCell>
             <TableCell>W2</TableCell>
             <TableCell>W1</TableCell>
-            <TableCell>1/24</TableCell>
+
+            {customWeatherData.slice(0, 7).map((data, index) => {
+              return (
+                <TableCell key={index}>
+                  {moment(data.wthrDte).format("MM/DD")}
+                </TableCell>
+              );
+            })}
+
+            {/* <TableCell>1/24</TableCell>
             <TableCell>1/25</TableCell>
             <TableCell>1/26</TableCell>
             <TableCell>1/27</TableCell>
             <TableCell>1/28</TableCell>
             <TableCell>1/29</TableCell>
-            <TableCell>1/30</TableCell>
+            <TableCell>1/30</TableCell> */}
           </TableRow>
           <TableRow>
             <TableCell />
@@ -47,40 +72,74 @@ const Dashboard = () => {
             <TableCell />
             <TableCell />
             <TableCell />
-            <TableCell>Mon</TableCell>
+
+            {customWeatherData.slice(0, 7).map((data, index) => {
+              return (
+                <TableCell key={index}>
+                  {moment(data.wthrDte).format("ddd")}
+                </TableCell>
+              );
+            })}
+
+            {/* <TableCell>Mon</TableCell>
             <TableCell>Tue</TableCell>
             <TableCell>Wed</TableCell>
             <TableCell>Thu</TableCell>
             <TableCell>Fri</TableCell>
             <TableCell>Sat</TableCell>
-            <TableCell>Sun</TableCell>
+            <TableCell>Sun</TableCell> */}
             <TableCell>Sales % Total</TableCell>
           </TableRow>
           <TableRow>
             <TableCell variant="head">Category</TableCell>
             <TableCell />
-            <TableCell>01/27-01/02</TableCell>
+
+            {customCategoryAnalysisWeekly.slice(0, 5).map((data, index) => {
+              return (
+                <TableCell key={index}>
+                  {moment(data.toDate).format("MM-DD")}-
+                  {moment(data.fromDate).format("MM-DD")}
+                </TableCell>
+              );
+            })}
+
+            {/* <TableCell>01/27-01/02</TableCell>
             <TableCell>01/03-01/09</TableCell>
             <TableCell>01/10-01/16</TableCell>
             <TableCell>01/17-01/23</TableCell>
-            <TableCell>01/24-01/30</TableCell>
+            <TableCell>01/24-01/30</TableCell> */}
+
+            {customWeatherData.slice(0, 7).map((data, index) => {
+              return (
+                <TableCell key={index}>
+                  {data.hiTempNum}/{data.loTempNum}
+                </TableCell>
+              );
+            })}
+
+            {/* <TableCell>77'/44'</TableCell>
             <TableCell>77'/44'</TableCell>
             <TableCell>77'/44'</TableCell>
             <TableCell>77'/44'</TableCell>
             <TableCell>77'/44'</TableCell>
             <TableCell>77'/44'</TableCell>
-            <TableCell>77'/44'</TableCell>
-            <TableCell>77'/44'</TableCell>
+            <TableCell>77'/44'</TableCell> */}
             <TableCell>WOs % Total</TableCell>
           </TableRow>
           <TableRow>
             <TableCell />
             <TableCell>Sales</TableCell>
-            <TableCell>41</TableCell>
+
+            {customCategoryAnalysisWeekly.map((data, index) => {
+              return <TableCell key={index}>{data.psaTotalSales}</TableCell>;
+            })}
+
+            {/* <TableCell>41</TableCell>
             <TableCell>7</TableCell>
             <TableCell>10</TableCell>
             <TableCell>12</TableCell>
-            <TableCell>7</TableCell>
+            <TableCell>7</TableCell> */}
+
             {/* some othere data */}
             <TableCell>10</TableCell>
             <TableCell>10</TableCell>
@@ -90,11 +149,18 @@ const Dashboard = () => {
           <TableRow>
             <TableCell>PSA Total</TableCell>
             <TableCell>WOs</TableCell>
-            <TableCell>1</TableCell>
+            {customCategoryAnalysisWeekly.map((data, index) => {
+              return (
+                <TableCell key={index}>{data.psaTotalWriteOffs}</TableCell>
+              );
+            })}
+
+            {/* <TableCell>1</TableCell>
             <TableCell>1</TableCell>
             <TableCell>2</TableCell>
             <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
+            <TableCell>1</TableCell> */}
+
             {/* some othere data */}
             <TableCell>10</TableCell>
             <TableCell>10</TableCell>
@@ -135,6 +201,19 @@ const Dashboard = () => {
             <TableCell>.</TableCell>
             <TableCell>.</TableCell>
           </TableRow>
+
+
+        {/* {categoryEntires.forEach(([key, value]) => {
+          return (
+            <TableRow>
+              <TableCell>{key}</TableCell>
+              <TableCell>WOsss</TableCell>
+              <TableCell>{value}</TableCell>
+            </TableRow>
+          )
+        })} */}
+
+
           <TableRow>
             <TableCell>Baby food</TableCell>
             <TableCell>WOs</TableCell>
@@ -169,6 +248,9 @@ const Dashboard = () => {
             <TableCell>.</TableCell>
             <TableCell>.</TableCell>
           </TableRow>
+
+
+
           <TableRow>
             <TableCell />
             <TableCell>Sales</TableCell>
