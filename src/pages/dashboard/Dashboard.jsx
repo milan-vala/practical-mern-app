@@ -1,13 +1,46 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../utils/AppContext";
 import moment from "moment";
 import { Button, Table, TableCell, TableRow, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import sampleData from "./sample-weather-data.json";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [data, setData] = useState(null);
+
+  const handleGetData = async () => {
+    try {
+      const url = process.env.REACT_APP_BASEURL + "/api/weather";
+      const token = window.sessionStorage.getItem("token");
+      const response = await axios.get(url, {
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
+      });
+      if (response.data) {
+        setData(response.data);
+      }
+    } catch (error) {
+      console.log("Error: API failed while getting weather data - ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
+
   const userContext = useContext(AppContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data) {
+
+    }
+  }, [data]);
+
   const {
     response: { categoryAnalysisWeekly, weatherData },
   } = sampleData;
